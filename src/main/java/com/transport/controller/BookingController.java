@@ -5,6 +5,7 @@ import com.transport.model.Booking;
 import com.transport.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,10 @@ import java.util.UUID;
 public class BookingController {
     private final BookingService bookingService;
 
+    @PostConstruct
+    public void init() {
+        System.out.println("BookingController loaded");
+    }
     @PostMapping
     @Operation(summary = "Créer une nouvelle réservation")
     public ResponseEntity<Booking> createBooking(@RequestBody BookingRequest request) {
@@ -26,7 +31,7 @@ public class BookingController {
             request.getTripId(),
             request.getPassengerName(),
             request.getPassengerPhone(),
-            request.getSeatNumber()
+            request.getSeatNumbers()
         );
         return ResponseEntity.ok(booking);
     }

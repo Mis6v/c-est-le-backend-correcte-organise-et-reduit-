@@ -1,8 +1,10 @@
 package com.transport.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +18,7 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
@@ -25,9 +28,13 @@ public class Booking {
 
     @Column(nullable = false)
     private String passengerPhone;
-
-    @Column(nullable = false)
-    private Integer seatNumber;
+    @ElementCollection
+    @CollectionTable(
+            name = "booking_seats",
+            joinColumns = @JoinColumn(name = "booking_id")
+    )
+    @Column(name = "seat_number")
+    private List<Integer> seatNumbers;
 
     @Column(nullable = false)
     private LocalDateTime bookingDate;

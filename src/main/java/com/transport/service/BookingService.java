@@ -22,26 +22,27 @@ public class BookingService {
     private final TripRepository tripRepository;
 
     @Transactional
-    public Booking createBooking(UUID tripId, String passengerName, String passengerPhone, Integer seatNumber) {
-        // Vérifie que le trajet existe
+    public Booking createBooking(UUID tripId,
+                                 String passengerName,
+                                 String passengerPhone,
+                                 List<Integer> seatNumbers) {
+
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trajet non trouvé"));
 
-        // Vérifie la disponibilité
-        if (trip.getAvailableSeats() <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Plus de places disponibles pour ce trajet");
+        if (trip.getAvailableSeats() < seatNumbers.size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pas assez de places disponibles");
         }
 
-        // Mise à jour des places disponibles
-        trip.setAvailableSeats(trip.getAvailableSeats() - 1);
+        // update seats correctly
+        trip.setAvailableSeats(trip.getAvailableSeats() - seatNumbers.size());
         tripRepository.save(trip);
 
-        // Création de la réservation
         Booking booking = Booking.builder()
                 .trip(trip)
                 .passengerName(passengerName)
                 .passengerPhone(passengerPhone)
-                .seatNumber(seatNumber)
+                .seatNumbers(seatNumbers)
                 .bookingDate(LocalDateTime.now())
                 .status(BookingStatus.CONFIRMED)
                 .build();
