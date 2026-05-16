@@ -1,4 +1,72 @@
-INSERT INTO trips (id, departure_city, destination_city, departure_time, arrival_time, price, transport_type, available_seats, company_name)
+INSERT INTO drivers (id, full_name, phone, license_number, vehicle_name, vehicle_plate, available)
 VALUES
-    ('11111111-1111-1111-1111-111111111111', 'Rosso', 'Nouakchott', '2026-03-30 08:00:00', '2026-03-30 11:00:00', 3000.00, 'Bus', 45, 'Esselam'),
-    ('22222222-2222-2222-2222-222222222222', 'Nouakchott', 'Aleg', '2026-03-30 07:30:00', '2026-03-30 10:30:00', 2500.00, 'Bus', 40, 'Esselam');
+    ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Ahmed Salem', '22220001', 'MR-LIC-1001', 'Toyota Hiace', 'NKC-1001', true),
+    ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Mouhamed Ali', '22220002', 'MR-LIC-1002', 'Mercedes Sprinter', 'NKC-1002', true);
+
+INSERT INTO trips (
+    id,
+    trip_number,
+    driver_id,
+    departure_city,
+    destination_city,
+    departure_time,
+    arrival_time,
+    price,
+    transport_type,
+    available_seats,
+    company_name,
+    status,
+    progress_percentage,
+    departure_latitude,
+    departure_longitude,
+    destination_latitude,
+    destination_longitude,
+    current_latitude,
+    current_longitude,
+    last_location_update
+)
+VALUES
+    (
+        '11111111-1111-1111-1111-111111111111',
+        'TRIP-1001',
+        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+        'Rosso',
+        'Nouakchott',
+        '2026-05-15 08:00:00',
+        '2026-05-15 11:00:00',
+        3000.00,
+        'Bus',
+        45,
+        'Esselam',
+        'IN_PROGRESS',
+        35.0,
+        16.5138,
+        -15.8050,
+        18.0735,
+        -15.9582,
+        17.0500,
+        -15.8800,
+        CURRENT_TIMESTAMP
+    ),
+    (
+        '22222222-2222-2222-2222-222222222222',
+        'TRIP-1002',
+        'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+        'Nouakchott',
+        'Aleg',
+        '2026-05-29 07:30:00',
+        '2026-05-30 10:30:00',
+        2500.00,
+        'Bus',
+        40,
+        'Esselam',
+        'SCHEDULED',
+        0.0,
+        18.0735,
+        -15.9582,
+        17.0531,
+        -13.9131,
+        18.0735,
+        -15.9582,
+        CURRENT_TIMESTAMP
+    );

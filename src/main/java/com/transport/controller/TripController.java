@@ -1,5 +1,7 @@
 package com.transport.controller;
 
+import com.transport.dto.TripLocationUpdateRequest;
+import com.transport.dto.TripTrackingResponse;
 import com.transport.model.Trip;
 import com.transport.service.TripService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,5 +41,19 @@ public class TripController {
     @Operation(summary = "Récupérer les détails d'un trajet par ID")
     public ResponseEntity<Trip> getTripById(@PathVariable UUID id) {
         return ResponseEntity.ok(tripService.getTripById(id));
+    }
+
+    @GetMapping("/track/{tripNumber}")
+    @Operation(summary = "Suivre un trajet par numéro")
+    public TripTrackingResponse trackTrip(@PathVariable String tripNumber) {
+        return tripService.getTrackingByTripNumber(tripNumber);
+    }
+
+    @PutMapping("/track/{tripNumber}/location")
+    @Operation(summary = "Mettre à jour la position en temps réel d'un trajet")
+    public TripTrackingResponse updateTripLocation(
+            @PathVariable String tripNumber,
+            @RequestBody TripLocationUpdateRequest request) {
+        return tripService.updateLocation(tripNumber, request);
     }
 }
