@@ -35,19 +35,35 @@ public class UserService {
     }
 
     // LOGIN
+    // LOGIN + CREATE ACCOUNT AUTOMATIQUE
     public String login(RegisterDto dto) {
 
         Optional<User> optionalUser =
                 userRepository.findByTelephone(
                         dto.getTelephone());
 
+        // utilisateur n'existe pas
         if(optionalUser.isEmpty()) {
-            return "UTILISATEUR_INTROUVABLE";
+
+            User newUser = new User();
+
+            newUser.setTelephone(
+                    dto.getTelephone());
+
+            newUser.setCode(
+                    dto.getCode());
+
+            userRepository.save(newUser);
+
+            return "SUCCESS";
         }
 
+        // utilisateur existe déjà
         User user = optionalUser.get();
 
+        // vérifier le code
         if(user.getCode().equals(dto.getCode())) {
+
             return "SUCCESS";
         }
 
