@@ -1,9 +1,11 @@
 package com.transport.controller;
 
+import com.transport.dto.ShareLinkResponse;
 import com.transport.dto.TripLocationUpdateRequest;
 import com.transport.dto.TripTrackingResponse;
 import com.transport.model.Trip;
 import com.transport.service.TripService;
+import com.transport.service.TripShareService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class TripController {
     private final TripService tripService;
+    private final TripShareService tripShareService;
 
     @GetMapping
     @Operation(summary = "Récupérer tous les trajets")
@@ -47,6 +50,27 @@ public class TripController {
     @Operation(summary = "Suivre un trajet par numéro")
     public TripTrackingResponse trackTrip(@PathVariable String tripNumber) {
         return tripService.getTrackingByTripNumber(tripNumber);
+    }
+
+    @PostMapping("/track/{tripNumber}/share")
+    @Operation(summary = "Générer un lien public de suivi")
+    public ShareLinkResponse generateShareLink(
+            @PathVariable String tripNumber
+    ) {
+
+        return tripShareService.generateShareLink(
+                tripNumber
+        );
+    }
+    @GetMapping("/public/{token}")
+    @Operation(summary = "Suivi public via token")
+    public TripTrackingResponse getPublicTracking(
+            @PathVariable String token
+    ) {
+
+        return tripShareService.getSharedTracking(
+                token
+        );
     }
 
     @PutMapping("/track/{tripNumber}/location")
